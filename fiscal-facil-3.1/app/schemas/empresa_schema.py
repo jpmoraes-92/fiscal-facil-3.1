@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 
 # Opções fixas para evitar erro de digitação
@@ -17,7 +17,7 @@ class CnaeMapeamento(BaseModel):
 
 # O que o Front envia para SALVAR no banco
 class EmpresaSalvar(BaseModel):
-    escritorio_id: int = 1 # Padrão 1 para a POC
+    escritorio_id: int = 1  # Padrão 1 para a POC
     cnpj: str
     razao_social: str
     nome_fantasia: Optional[str] = None
@@ -43,7 +43,6 @@ class EmpresaUpdate(BaseModel):
     bairro: Optional[str] = None
     municipio: Optional[str] = None
     uf: Optional[str] = None
-    # Nota: CNPJ não pode ser alterado (chave única)
 
 # Schema completo para retornar empresa com todos os dados
 class EmpresaCompleta(BaseModel):
@@ -54,6 +53,12 @@ class EmpresaCompleta(BaseModel):
     regime_tributario: str
     data_abertura: Optional[date] = None
     limite_faturamento_anual: Optional[float] = None
+    
+    # Novos campos de monitoramento
+    status_rbt12: Optional[str] = 'OK'
+    percentual_uso_limite: Optional[float] = 0.0
+    coleta_automatica_ativa: Optional[bool] = True
+    ultima_coleta: Optional[datetime] = None
     
     class Config:
         from_attributes = True
